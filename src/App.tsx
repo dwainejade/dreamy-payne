@@ -12,7 +12,7 @@ function App() {
         dpr={[1, 2]}
         camera={{ fov: 50, position: [50, 50, 50], near: 0.1, far: 1000 }}
       >
-        <Perf position="top-left" />
+        <Perf position="bottom-left" />
         <OrbitControls />
         <Scene />
       </Canvas>

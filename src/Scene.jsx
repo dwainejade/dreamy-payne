@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { useState } from "react";
 import Floor from "./components/Floor";
 import { Physics } from "@react-three/rapier";
 import Lights from "./components/Lights";
@@ -8,55 +8,43 @@ import {
   Center,
   GizmoHelper,
   GizmoViewport,
-  AccumulativeShadows,
-  RandomizedLight,
+  Sky,
   Environment,
 } from "@react-three/drei";
+import { useStore } from "./store/store";
 
 const Scene = () => {
-  const gridConfig = {
-    cellSize: 0.6,
-    cellThickness: 1,
-    cellColor: "#6f6f6f",
-    sectionSize: 3.3,
-    sectionThickness: 1.5,
-    sectionColor: "#9d4b4b",
-    fadeDistance: 60,
-    fadeStrength: 1,
-    followCamera: false,
-    infiniteGrid: true,
-  };
-
+  const { ballOneMass, ballTwoMass } = useStore();
+  console.log(ballOneMass, ballTwoMass);
   return (
-    <Physics gravity={[0, -9.81, 0]} debug>
-      {/* <Lights /> */}
-      <Ball position={[6, 4, 0]} color="orange" name="ball-1" mass={1} />
-      <Ball
-        position={[-6, 4, 0]}
-        color="mediumorchid"
-        name="ball-2"
-        mass={10000}
-      />
-      <Floor scale={2} />
-      {/* <Grid position={[0, -0.01, 0]} args={[10.5, 10.5]} {...gridConfig} /> */}
+    <>
+      <Physics gravity={[0, -9.81, 0]}>
+        <Ball
+          position={[6, 4, 0]}
+          color="orange"
+          name="ball-1"
+          mass={ballOneMass}
+        />
+        <Ball
+          position={[-6, 4, 0]}
+          color="mediumorchid"
+          name="ball-2"
+          mass={ballTwoMass}
+        />
+        <Floor scale={2} />
 
-      <Environment preset="sunset" />
-      <Shadows />
-    </Physics>
+        <Environment preset="city" />
+
+        <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+          <GizmoViewport
+            axisColors={["#9d4b4b", "#2f7f4f", "#3b5b9d"]}
+            labelColor="white"
+          />
+        </GizmoHelper>
+      </Physics>
+      <Sky />
+    </>
   );
 };
 
 export default Scene;
-
-const Shadows = memo(() => (
-  <AccumulativeShadows
-    temporal
-    frames={100}
-    color="#9d4b4b"
-    colorBlend={0.5}
-    alphaTest={0.9}
-    scale={20}
-  >
-    <RandomizedLight amount={8} radius={4} position={[5, 5, -10]} />
-  </AccumulativeShadows>
-));

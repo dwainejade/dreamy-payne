@@ -1,19 +1,21 @@
 import { RigidBody } from "@react-three/rapier";
 import { useRef, useEffect } from "react";
 
-export default function Ball(props) {
+export default function Ball({ name, mass = 1, position, color }) {
   const ballRef = useRef();
+  // console.log({ name, mass, position, color });
+  // console.log("Initial Ball mass:", ballRef.current.mass());
 
   useEffect(() => {
     if (ballRef.current) {
-      console.log("Ball initialized with mass:", ballRef.current.mass());
+      // Log the mass after the component updates
+      console.log("Updated Ball mass:", ballRef.current);
     }
-  }, []);
+  }, [ballRef.current]); // Dependency on the ref's current value
 
   const handleClick = () => {
     if (ballRef.current) {
-      // Apply an upward impulse
-      const upwardImpulse = { x: 300, y: 0, z: 0 }; // Adjust 'y' for the strength of the jump
+      const upwardImpulse = { x: 300, y: 0, z: 0 };
       ballRef.current.applyImpulse(upwardImpulse);
     }
   };
@@ -23,18 +25,19 @@ export default function Ball(props) {
       ref={ballRef}
       colliders="ball"
       type="dynamic"
+      name={name}
+      mass={mass}
+      position={position}
       friction={1}
-      mass={100}
-      linearDamping={0.5}
+      linearDamping={1}
       angularDamping={0.5}
-      restitution={0.9}
-      onClick={handleClick}
+      restitution={0.8}
       canSleep={false}
-      {...props}
+      onClick={handleClick}
     >
-      <mesh castShadow receiveShadow>
+      <mesh>
         <sphereGeometry />
-        <meshStandardMaterial color={props.color} />
+        <meshStandardMaterial color={color} />
       </mesh>
     </RigidBody>
   );

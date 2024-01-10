@@ -9,9 +9,9 @@ export default function Floor(props) {
       friction={0}
       {...props}
     >
-      <mesh receiveShadow>
+      <mesh>
         <boxGeometry args={[500, 500, 0.5]} />
-        <meshStandardMaterial transparent color="grey" opacity={0.8} />
+        <meshStandardMaterial transparent color="grey" opacity={0} />
       </mesh>
     </RigidBody>
   );
